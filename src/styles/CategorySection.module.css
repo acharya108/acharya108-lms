@@ -1,0 +1,81 @@
+.categorySection {
+  margin-bottom: 20px;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.categoryHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.categoryHeader:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.categoryInfo {
+  flex: 1;
+}
+
+.categoryTitle {
+  font-size: 1.8em;
+  margin: 0 0 8px 0;
+  font-weight: bold;
+}
+
+.categoryDescription {
+  opacity: 0.9;
+  font-size: 1.1em;
+}
+
+.categoryStats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.subCategoryCount,
+.courseCount {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.arrow {
+  font-size: 1.2em;
+  transition: transform 0.3s ease;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+.categoryContent {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.contentVisible {
+  max-height: 5000px;
+  opacity: 1;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+.contentHidden {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 20px;
+  background: #f8f9fa;
+}

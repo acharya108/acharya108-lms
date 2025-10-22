@@ -1,0 +1,32 @@
+// Start each development session with this:
+const sessionContext = `
+IMPORTANT CONTEXT - READ FIRST:
+
+TECH STACK:
+- Database: Neon PostgreSQL + Prisma ✅
+- AI: Hugging Face Models ✅  
+- Frontend: Next.js 14 ✅
+- Deployment: Vercel ✅
+- Storage: Cloudflare R2 ✅
+
+CURRENT STATUS:
+- Database schema designed ✅
+- Ready for Neon deployment 🚀
+- Next: Admin panel + Hugging Face integration
+
+KEY DECISIONS:
+1. 5-level lesson system with difficulty progression
+2. Syllabus versioning with cloning capability  
+3. Hugging Face for AI evaluation (free tier)
+4. Rich media content (videos, animations, formulas)
+
+DO NOT SUGGEST:
+- Alternative databases (stick with Neon)
+- Paid AI APIs (stick with Hugging Face)
+- Different frameworks (stick with Next.js)
+
+NEXT ACTIONS:
+1. Deploy Prisma to Neon
+2. Build content management admin
+3. Integrate Hugging Face models
+`;

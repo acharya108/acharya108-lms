@@ -1554,3 +1554,4 @@ export default function CourseIntroPage() {
     </div>
   );
 }
+export { courseDetails };

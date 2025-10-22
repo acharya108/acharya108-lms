@@ -1,4 +1,4 @@
-// components/Header.jsx
+// src/components/Header.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.css';

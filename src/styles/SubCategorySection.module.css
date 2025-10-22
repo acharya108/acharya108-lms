@@ -1,0 +1,84 @@
+.subCategorySection {
+  margin-bottom: 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+.subCategoryHeader {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 20px 25px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s ease;
+}
+
+.subCategoryHeader:hover {
+  background: linear-gradient(135deg, #ee7de8 0%, #f34157 100%);
+}
+
+.subCategoryInfo {
+  flex: 1;
+}
+
+.subCategoryTitle {
+  font-size: 1.4em;
+  margin: 0 0 5px 0;
+  font-weight: bold;
+}
+
+.subCategoryDescription {
+  opacity: 0.9;
+  font-size: 1em;
+}
+
+.subCategoryStats {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.courseCount {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.arrow {
+  font-size: 1em;
+  transition: transform 0.3s ease;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+.subCategoryContent {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.contentVisible {
+  max-height: 5000px;
+  opacity: 1;
+  padding: 20px;
+}
+
+.contentHidden {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 20px;
+}
+
+.noCourses {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  font-style: italic;
+}

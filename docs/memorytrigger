@@ -1,0 +1,20 @@
+// Memory triggers storage
+const memoryTriggers = {
+  techStack: {
+    database: "Neon PostgreSQL + Prisma",
+    ai: "Hugging Face Models",
+    frontend: "Next.js 14", 
+    deployment: "Vercel",
+    storage: "Cloudflare R2"
+  },
+  keyDecisions: {
+    architecture: "5-level lesson system with versioning",
+    evaluation: "Hugging Face for AI assessment",
+    content: "Rich media with interactive elements"
+  },
+  contextPrompts: [
+    "Recall our previous decisions about [technology]",
+    "Continue from where we left off with [feature]",
+    "Remember we already decided on [X], now implement Y"
+  ]
+};

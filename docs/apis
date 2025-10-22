@@ -1,0 +1,32 @@
+// For passwords/API keys - encrypted storage
+class SecureNoteManager {
+  async storeSensitiveData(key, value, category = "credentials") {
+    const encryptedValue = await this.encrypt(value);
+    
+    return await prisma.systemSetting.upsert({
+      where: { key },
+      update: { value: encryptedValue },
+      create: {
+        key,
+        value: encryptedValue,
+        category,
+        isEncrypted: true,
+        description: `Encrypted ${category}`
+      }
+    });
+  }
+  
+  async getSensitiveData(key) {
+    const setting = await prisma.systemSetting.findUnique({
+      where: { key, isEncrypted: true }
+    });
+    return setting ? await this.decrypt(setting.value) : null;
+  }
+}
+
+
+
+
+//pokebun:rjagathe@gmail.com/Sanvika@2025
+//Neon:acharya108@zohomail.in/Sanvika@2025
+//connection String:psql 'postgresql://neondb_owner:npg_9zvJsCbmMR5a@ep-quiet-credit-a1zv7sc6-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'

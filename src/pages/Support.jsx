@@ -1,21 +1,21 @@
 import React from 'react';
-import styles from '../styles/Common.module.css';
+import Layout from '../components/Layout';
 
 const Support = () => {
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.content}>
-        <h1>Support</h1>
+    <Layout> {/* Fixed: was <laout> */}
+      <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
+        <h1 style={{ color: '#1e3c72', textAlign: 'center' }}>Support</h1>
         <p>We're here to help you with any questions or issues you may have.</p>
         
-        <div className={styles.contactInfo}>
+        <div style={{ marginTop: '30px' }}>
           <h2>Contact Support</h2>
           <p>📧 Email: support@drillmasters.in</p>
           <p>📞 Phone: +91-XXXXXXXXXX</p>
           <p>🕒 Support Hours: 9:00 AM - 6:00 PM (IST)</p>
         </div>
         
-        <div className={styles.faqSection}>
+        <div style={{ marginTop: '30px' }}>
           <h2>Common Issues</h2>
           <ul>
             <li>Course access problems</li>
@@ -25,7 +25,7 @@ const Support = () => {
           </ul>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

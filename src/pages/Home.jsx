@@ -1,187 +1,198 @@
-// src/pages/Home.jsx
-import React, { useState } from 'react';
+// src/pages/Home.jsx Removed import { useAuth } from '../context/AuthContext';
+
+//Removed const { isUserEnrolled, canEnrollInCourse } = useAuth();
+
+//Kept all other functionality intact
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+// import { useAuth } from '../context/AuthContext';
 import Layout from '../components/Layout';
 import LoginForm from '../components/LoginForm';
+import CategorySection from '../components/CategorySection';
 import styles from '../styles/Home.module.css';
+
+// Import your existing course details structure
+import { courseDetails } from './CourseIntroPage';
 
 const Home = () => {
   const navigate = useNavigate();
-  const { isUserEnrolled, canEnrollInCourse } = useAuth();
-  const [openCategories, setOpenCategories] = useState({
-    'Recruitment Exams': true,
-    'Entrance Exams': false,
-    'Professional Courses': false,
-    'Technology & IT Certification': false,
-    'School Tuitions': false,
-    'Skill Development': false,
-    'Language Courses': false,
-    'Creative Arts': false,
-    'Business & Management': false,
-    'Health & Wellness': false,
-    'Personal Development & Soft Skills': false,
-    'Vocational & Technical Training': false,
-    'Sanatana Dharmic Life Styles': false
-  });
+  //const { isUserEnrolled, canEnrollInCourse } = useAuth();
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('drillmasters_user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Complete courseCategories object with ALL courses
-  const courseCategories = {
-    'School Tuitions': [
-      { id: 'ST_TN_09_E', name: 'Class 9 - English Medium', description: 'Tamil Nadu Board - English Medium' },
-      { id: 'ST_TN_09_T', name: 'Class 9 - Tamil Medium', description: 'Tamil Nadu Board - Tamil Medium' },
-      { id: 'ST_TN_10_E', name: 'Class 10 - English Medium', description: 'Tamil Nadu Board - English Medium' },
-      { id: 'ST_TN_10_T', name: 'Class 10 - Tamil Medium', description: 'Tamil Nadu Board - Tamil Medium' },
-      { id: 'ST_TN_11_E', name: 'Class 11 - English Medium', description: 'Tamil Nadu Board - English Medium' },
-      { id: 'ST_TN_11_T', name: 'Class 11 - Tamil Medium', description: 'Tamil Nadu Board - Tamil Medium' },
-      { id: 'ST_TN_12_E', name: 'Class 12 - English Medium', description: 'Tamil Nadu Board - English Medium' },
-      { id: 'ST_TN_12_T', name: 'Class 12 - Tamil Medium', description: 'Tamil Nadu Board - Tamil Medium' },
-      { id: 'ST_CB_09_E', name: 'Class 9 - CBSE', description: 'CBSE Board - English Medium' },
-      { id: 'ST_CB_10_E', name: 'Class 10 - CBSE', description: 'CBSE Board - English Medium' },
-      { id: 'ST_CB_11_E', name: 'Class 11 - CBSE', description: 'CBSE Board - English Medium' },
-      { id: 'ST_CB_12_E', name: 'Class 12 - CBSE', description: 'CBSE Board - English Medium' },
-      { id: 'ST_IC_09_E', name: 'Class 9 - ICSE', description: 'ICSE Board - English Medium' },
-      { id: 'ST_IC_10_E', name: 'Class 10 - ICSE', description: 'ICSE Board - English Medium' }
-    ],
-
-    'Recruitment Exams': [
-      { id: 'Rectt1', name: 'TNPSC', description: 'Tamil Nadu Public Service Commission' },
-      { id: 'Rectt2', name: 'TRB', description: 'Tamil Nadu Teachers Recruitment Board' },
-      { id: 'Rectt3', name: 'TNUSRB & Other TN Recruitments', description: 'Tamil Nadu Uniformed Services' },
-      { id: 'Rectt4', name: 'SSC', description: 'Staff Selection Commission' },
-      { id: 'Rectt5', name: 'UPSC', description: 'Union Public Service Commission' },
-      { id: 'Rectt6', name: 'RRB', description: 'Railway Recruitment Board' },
-      { id: 'Rectt7', name: 'IBPS & Others', description: 'Banking and Financial Sector' }
-    ],
-
-    'Entrance Exams': [
-      { id: 'Ent1', name: 'JEE', description: 'Joint Entrance Examination' },
-      { id: 'Ent2', name: 'NEET', description: 'National Eligibility cum Entrance Test' },
-      { id: 'Ent3', name: 'CAT', description: 'Common Admission Test' },
-      { id: 'Ent4', name: 'GATE', description: 'Graduate Aptitude Test in Engineering' },
-      { id: 'Ent5', name: 'CLAT', description: 'Common Law Admission Test' },
-      { id: 'Ent6', name: 'CUET', description: 'Common University Entrance Test' },
-      { id: 'Ent7', name: 'TET', description: 'Teacher Eligibility Test' },
-      { id: 'Ent8', name: 'TANCET', description: 'Tamil Nadu Common Entrance Test' },
-      { id: 'Ent9', name: 'MAT', description: 'Management Aptitude Test' }
-    ],
-
-    'Professional Courses': [
-      { id: 'Prof1', name: 'CA', description: 'Chartered Accountancy' },
-      { id: 'Prof2', name: 'CMA', description: 'Cost and Management Accounting' },
-      { id: 'Prof3', name: 'CS', description: 'Company Secretaryship' },
-      { id: 'Prof4', name: 'CFA', description: 'Chartered Financial Analyst' },
-      { id: 'Prof5', name: 'FRM', description: 'Financial Risk Manager' },
-      { id: 'Prof6', name: 'ACCA', description: 'Association of Chartered Certified Accountants' }
-    ],
-
-    'Technology & IT Certification': [
-      { id: 'IT1', name: 'Computer Programming', description: 'Full Stack Development' },
-      { id: 'IT2', name: 'Data Science', description: 'Data Analysis & Machine Learning' },
-      { id: 'IT3', name: 'ML & AI', description: 'Machine Learning & Artificial Intelligence' },
-      { id: 'IT4', name: 'Cloud Computing', description: 'AWS, Azure, GCP' },
-      { id: 'IT5', name: 'Cyber Security', description: 'Network Security & Protection' },
-      { id: 'IT6', name: 'Ethical Hacking', description: 'Penetration Testing' },
-      { id: 'IT7', name: 'Dev Ops', description: 'Development & Operations' },
-      { id: 'IT8', name: 'Blockchain', description: 'Web3 & Blockchain Development' },
-      { id: 'IT9', name: 'IoT', description: 'Internet of Things' }
-    ],
-
-    'Skill Development': [
-      { id: 'Skill1', name: 'Digital Marketing', description: 'SEO, SEM, Social Media Marketing' },
-      { id: 'Skill2', name: 'Project Management', description: 'PMP, Agile, Scrum Methodologies' },
-      { id: 'Skill3', name: 'Business Analytics', description: 'Data Analysis & Business Intelligence' },
-      { id: 'Skill4', name: 'UI/UX Design', description: 'User Interface & Experience Design' },
-      { id: 'Skill5', name: 'Content Writing', description: 'Professional Writing & Copywriting' },
-      { id: 'Skill6', name: 'Public Speaking', description: 'Communication & Presentation Skills' }
-    ],
-
-    'Language Courses': [
-      { id: 'Lang1', name: 'English Proficiency', description: 'IELTS, TOEFL, PTE Preparation' },
-      { id: 'Lang2', name: 'Spoken English', description: 'Fluency & Communication Skills' },
-      { id: 'Lang3', name: 'French', description: 'Beginner to Advanced Levels' },
-      { id: 'Lang4', name: 'German', description: 'German Language Certification' },
-      { id: 'Lang5', name: 'Japanese', description: 'JLPT Preparation' },
-      { id: 'Lang6', name: 'Spanish', description: 'Spanish for Beginners' },
-      { id: 'Lang7', name: 'Tamil', description: 'Spoken & Written Tamil' },
-      { id: 'Lang8', name: 'Hindi', description: 'Hindi Language Proficiency' }
-    ],
-
-    'Creative Arts': [
-      { id: 'Art1', name: 'Graphic Design', description: 'Adobe Photoshop, Illustrator' },
-      { id: 'Art2', name: 'Video Editing', description: 'Premiere Pro, After Effects' },
-      { id: 'Art3', name: 'Photography', description: 'Digital Photography Techniques' },
-      { id: 'Art4', name: 'Music Theory', description: 'Western & Carnatic Music' },
-      { id: 'Art5', name: 'Drawing & Painting', description: 'Fine Arts & Sketching' },
-      { id: 'Art6', name: 'Digital Art', description: 'Digital Illustration & Concept Art' }
-    ],
-
-    'Business & Management': [
-      { id: 'Biz1', name: 'Artificial Intelligence for Business', description: 'AI Applications in Business Strategy' },
-      { id: 'Biz2', name: 'Sustainable Business & ESG', description: 'Environmental Social Governance' },
-      { id: 'Biz3', name: 'Digital Marketing & Analytics', description: 'Data-Driven Marketing Strategies' },
-      { id: 'Biz4', name: 'Global Supply Chain & Operations Management', description: 'International Operations Excellence' },
-      { id: 'Biz5', name: 'Financial Technology (FinTech) & Digital Finance', description: 'Modern Financial Systems' },
-      { id: 'Biz6', name: 'Product Management & Innovation', description: 'Product Development Lifecycle' },
-      { id: 'Biz7', name: 'People Analytics & Strategic HR', description: 'Data-Driven Human Resources' }
-    ],
-
-    'Health & Wellness': [
-      { id: 'Health1', name: 'Nutrition & Lifestyle Medicine', description: 'Holistic Health Approaches' },
-      { id: 'Health2', name: 'Integrative & Functional Wellness', description: 'Comprehensive Wellness Strategies' }
-    ],
-
-    'Personal Development & Soft Skills': [
-      { id: 'PD1', name: 'Critical Thinking & Complex Problem-Solving', description: 'Analytical Thinking Skills' },
-      { id: 'PD2', name: 'Leadership & Entrepreneurial Mindset', description: 'Leadership Development' },
-      { id: 'PD3', name: 'Emotional Intelligence (EQ) & Resilience', description: 'Emotional Mastery & Adaptability' }
-    ],
-
-    'Vocational & Technical Training': [
-      { id: 'Voc1', name: 'ITI/ISC Trades', description: 'Industrial Training Institute Courses' },
-      { id: 'Voc2', name: 'Manufacturing Skills', description: 'Production & Manufacturing Techniques' },
-      { id: 'Voc3', name: 'Automotive Repair', description: 'Vehicle Maintenance & Repair' },
-      { id: 'Voc4', name: 'Culinary Arts', description: 'Professional Cooking & Baking' },
-      { id: 'Voc5', name: 'Plumbing', description: 'Pipe Systems & Sanitation' },
-      { id: 'Voc6', name: 'Electrical', description: 'Electrical Systems & Wiring' },
-      { id: 'Voc7', name: 'Electronics/Mobile Repair', description: 'Electronic Device Repair' },
-      { id: 'Voc8', name: 'Tailoring', description: 'Fashion Design & Stitching' },
-      { id: 'Voc9', name: 'Beautician Course', description: 'Beauty & Skin Care Services' }
-    ],
-
-    'Sanatana Dharmic Life Styles': [
-      { id: 'SD1', name: 'Foundations of Sanatana Dharma', description: 'Core Principles & Philosophy' },
-      { id: 'SD2', name: 'Yoga & Meditation', description: 'Ancient Spiritual Practices' },
-      { id: 'SD3', name: 'Ayurveda & Vedic Wellness', description: 'Traditional Healing Systems' },
-      { id: 'SD4', name: 'Sanskrit Language & Indian Philosophy', description: 'Classical Language Studies' },
-      { id: 'SD5', name: 'Rituals, Festivals & Dharmic Practices', description: 'Cultural Traditions & Ceremonies' },
-      { id: 'SD6', name: 'Dharmic Ethics & Leadership', description: 'Moral Leadership Principles' },
-      { id: 'SD7', name: 'Indian Art, Music & Storytelling', description: 'Cultural Arts Heritage' },
-      { id: 'SD8', name: 'Seva (Service) & Dharmic Contribution', description: 'Selfless Service Practices' },
-      { id: 'SD9', name: 'Symbolism in Sanatana Dharma', description: 'Sacred Symbols & Meanings' },
-      { id: 'SD10', name: 'Applied Family & Satvik Living', description: 'Pure & Balanced Lifestyle' }
-    ]
+  // Helper functions to match your Excel structure
+  const getCategoryCode = (categoryName) => {
+    const codes = {
+      'School Tuitions': 'ST',
+      'Recruitment': 'RE', 
+      'Entrance Exams': 'EE',
+      'Professional Courses': 'PC',
+      'Technology & IT Certification': 'IT',
+      'Skill Development': 'SD',
+      'Language Courses': 'LA',
+      'Creative Arts': 'CA',
+      'Business & Management': 'BM',
+      'Health & Wellness': 'HW',
+      'Personal Development & Soft Skills': 'PD',
+      'Vocational & Technical Training': 'VT',
+      'Sanatana Dharmic Life Styles': 'SD'
+    };
+    return codes[categoryName] || categoryName.replace(/\s+/g, '_').toUpperCase();
   };
+
+  const getSubCategoryName = (categoryName, course) => {
+    // Map course names to proper sub-category names from Excel
+    if (categoryName === 'School Tuitions') {
+      if (course.name.includes('Tamil Nadu Board')) return 'TN State Board';
+      if (course.name.includes('CBSE')) return 'CBSE';
+      if (course.name.includes('ICSE')) return 'ICSE';
+      if (course.name.includes('Pearson')) return 'Pearson,UK';
+      if (course.name.includes('Canada')) return 'Canada';
+    }
+    if (categoryName === 'Recruitment') {
+      if (course.name === 'TNPSC') return 'TNPSC';
+      if (course.name === 'TRB') return 'TRB';
+      if (course.name === 'TNUSRB & Other TN Recruitments') return 'TNUSRB';
+      if (course.name === 'SSC') return 'SSC';
+      if (course.name === 'UPSC') return 'UPSC';
+      if (course.name === 'RRB') return 'RRB';
+      if (course.name === 'IBPS & Others') return 'IBPS';
+      if (course.name === 'SBI') return 'SBI';
+      if (course.name === 'NDA') return 'NDA';
+    }
+    if (categoryName === 'Entrance Exams') {
+      if (course.name === 'JEE') return 'IIT';
+      if (course.name === 'NEET') return 'MEDICAL';
+      if (course.name === 'CAT') return 'MANAGEMENT';
+      if (course.name === 'GATE') return 'ENGINEERING';
+      if (course.name === 'CLAT') return 'LAW';
+      if (course.name === 'CUET') return 'CENTRAL UNIVERSITIES';
+      if (course.name === 'TANCET') return 'ANNA UNIVERSITY';
+      if (course.name === 'NET' || course.name === 'SLET') return 'EDUCATION';
+      if (course.name === 'MAT') return 'MANAGEMENT';
+      if (course.name === 'TET') return 'EDUCATION';
+    }
+    if (categoryName === 'Professional Courses') {
+      if (course.name === 'CA') return 'ICAI';
+      if (course.name === 'CMA') return 'ICMAI';
+      if (course.name === 'CS') return 'ICS';
+      if (course.name === 'CFA') return 'CFA Institute';
+      if (course.name === 'FRM') return 'GARP';
+      if (course.name === 'ACCA') return 'ACCA';
+    }
+    return course.name.split(' - ')[0] || 'General';
+  };
+
+  const getSubCategoryCode = (categoryName, subCategoryName) => {
+    // Map to your Excel sub-category codes
+    const codes = {
+      // School Tuitions
+      'TN State Board': 'TN',
+      'CBSE': 'CB',
+      'ICSE': 'IC',
+      'Pearson,UK': 'PE',
+      'Canada': 'CA',
+      
+      // Recruitment
+      'TNPSC': 'TP',
+      'TRB': 'TR',
+      'TNUSRB': 'TU',
+      'RRB': 'RR',
+      'SSC': 'SS',
+      'NDA': 'ND',
+      'IBPS': 'IB',
+      'SBI': 'SB',
+      'UPSC': 'UP',
+      
+      // Entrance Exams
+      'IIT': 'II',
+      'MEDICAL': 'ME',
+      'MANAGEMENT': 'MG',
+      'LAW': 'CL',
+      'ENGINEERING': 'GA',
+      'CENTRAL UNIVERSITIES': 'CU',
+      'ANNA UNIVERSITY': 'AU',
+      'EDUCATION': 'ED',
+      
+      // Professional Courses
+      'ICAI': 'CA',
+      'ICS': 'CS',
+      'ICMAI': 'MA',
+      
+      // Others (to be updated)
+      'Technology & IT Certification': 'IT',
+      'Skill Development': 'SD',
+      'Language Courses': 'LA',
+      'Creative Arts': 'CA',
+      'Business & Management': 'BM',
+      'Health & Wellness': 'HW',
+      'Personal Development & Soft Skills': 'PD',
+      'Vocational & Technical Training': 'VT',
+      'Sanatana Dharmic Life Styles': 'SD'
+    };
+    return codes[subCategoryName] || subCategoryName.replace(/\s+/g, '_').toUpperCase();
+  };
+
+  // Organize courses into categories based on your courseDetails structure
+  useEffect(() => {
+    const organizeCoursesByCategory = () => {
+      const categoryMap = {};
+      
+      // Process all courses from your courseDetails
+      Object.entries(courseDetails).forEach(([courseId, course]) => {
+        const categoryName = course.category;
+        
+        if (!categoryMap[categoryName]) {
+          categoryMap[categoryName] = {
+            id: getCategoryCode(categoryName),
+            name: categoryName,
+            description: `${categoryName} courses and programs`,
+            subCategories: {}
+          };
+        }
+        
+        // Get proper sub-category name and code from your Excel structure
+        let subCategoryName = getSubCategoryName(categoryName, course);
+        let subCategoryCode = getSubCategoryCode(categoryName, subCategoryName);
+        
+        if (!categoryMap[categoryName].subCategories[subCategoryName]) {
+          categoryMap[categoryName].subCategories[subCategoryName] = {
+            id: subCategoryCode,
+            name: subCategoryName,
+            description: `${subCategoryName} courses`,
+            courses: []
+          };
+        }
+        
+        categoryMap[categoryName].subCategories[subCategoryName].courses.push({
+          id: courseId, // This uses your existing course IDs (Rectt1, ST_TN_09_E, etc.)
+          name: course.name,
+          description: course.description,
+          duration: course.duration,
+          level: course.level
+        });
+      });
+      
+      // Convert to array format for components
+      return Object.values(categoryMap).map(category => ({
+        ...category,
+        subCategories: Object.values(category.subCategories)
+      }));
+    };
+
+    const categoriesData = organizeCoursesByCategory();
+    setCategories(categoriesData);
+    setLoading(false);
+  }, []);
 
   const handleCourseClick = (courseId) => {
     console.log('Course clicked:', courseId);
     navigate(`/intro/${courseId}`);
-  };
-
-  const handleCategoryToggle = (category) => {
-    setOpenCategories(prev => ({
-      ...prev,
-      [category]: !prev[category]
-    }));
-  };
-
-  const isCategoryOpen = (category) => {
-    return openCategories[category];
   };
 
   const handleLoginSuccess = (userData) => {
@@ -196,46 +207,45 @@ const Home = () => {
     window.location.reload();
   };
 
-  const renderCourseContent = (category, courses) => {
+  if (loading) {
     return (
-      <div className={`${styles.courseContent} ${isCategoryOpen(category) ? styles.contentVisible : styles.contentHidden}`}>
-        <div className={styles.courseGrid}>
-          {courses.map((course) => (
-            <div 
-              key={course.id} 
-              className={styles.courseCard}
-              onClick={() => handleCourseClick(course.id)}
-            >
-              <div className={styles.courseIcon}>
-                {course.name.charAt(0)}
-              </div>
-              <div className={styles.courseInfo}>
-                <h4 className={styles.courseName}>{course.name}</h4>
-                <p className={styles.courseDescription}>{course.description}</p>
-                <button className={styles.learnMoreBtn}>
-                  Learn More →
-                </button>
-              </div>
-            </div>
-          ))}
+      <Layout>
+        <div className={styles.loadingContainer}>
+          <div className={styles.spinner}></div>
+          <p>Loading courses...</p>
         </div>
-      </div>
+      </Layout>
     );
-  };
+  }
 
   return (
     <Layout>
       <div className={styles.homeContainer}>
-        {/* Hero Section with Login Button */}
+        {/* Hero Section */}
         <div className={styles.heroSection}>
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitle}>Welcome to DrillMasters</h1>
             <p className={styles.heroSubtitle}>
-              Your comprehensive learning platform for academic excellence, professional growth, and personal development
+              Your comprehensive learning platform with structured curriculum across multiple categories
             </p>
-            
-            {/* Login/User Info in Hero Section */}
-            <div className={styles.authSection}>
+
+            <div className={styles.heroStats}>
+              <div className={styles.statItem}>
+                <h3>{Object.keys(courseDetails).length}+</h3>
+                <p>Courses</p>
+              </div>
+              <div className={styles.statItem}>
+                <h3>20,000+</h3>
+                <p>Students</p>
+              </div>
+              <div className={styles.statItem}>
+                <h3>97%</h3>
+                <p>Success Rate</p>
+              </div>
+            </div>
+
+            {/* Home-specific Auth Section */}
+            <div className={styles.homeAuthSection}>
               {user ? (
                 <div className={styles.userInfo}>
                   <span className={styles.welcomeText}>Welcome, {user.name}!</span>
@@ -253,22 +263,8 @@ const Home = () => {
                 >
                   Student Login
                 </button>
+                
               )}
-            </div>
-
-            <div className={styles.heroStats}>
-              <div className={styles.statItem}>
-                <h3>100+</h3>
-                <p>Courses</p>
-              </div>
-              <div className={styles.statItem}>
-                <h3>20,000+</h3>
-                <p>Students</p>
-              </div>
-              <div className={styles.statItem}>
-                <h3>97%</h3>
-                <p>Success Rate</p>
-              </div>
             </div>
           </div>
         </div>
@@ -281,33 +277,20 @@ const Home = () => {
           />
         )}
 
-        {/* Course Categories Section */}
+        {/* Categories Section */}
         <div className={styles.categoriesSection}>
           <div className={styles.container}>
-            <h2 className={styles.sectionTitle}>Our Courses</h2>
+            <h2 className={styles.sectionTitle}>Our Learning Programs</h2>
             <p className={styles.sectionSubtitle}>
-              Explore our comprehensive range of courses across multiple categories designed for holistic development
+              Explore {Object.keys(courseDetails).length}+ courses across {categories.length} categories
             </p>
 
-            {Object.entries(courseCategories).map(([category, courses]) => (
-              <div key={category} className={styles.categorySection}>
-                {/* Category Header */}
-                <div 
-                  className={styles.categoryHeader}
-                  onClick={() => handleCategoryToggle(category)}
-                >
-                  <h3 className={styles.categoryTitle}>
-                    {category}
-                    <span className={styles.courseCount}>({courses.length} courses)</span>
-                  </h3>
-                  <span className={`${styles.arrow} ${isCategoryOpen(category) ? styles.arrowOpen : ''}`}>
-                    ▼
-                  </span>
-                </div>
-
-                {/* Course Content */}
-                {renderCourseContent(category, courses)}
-              </div>
+            {categories.map((category) => (
+              <CategorySection
+                key={category.id}
+                category={category}
+                onCourseClick={handleCourseClick}
+              />
             ))}
           </div>
         </div>

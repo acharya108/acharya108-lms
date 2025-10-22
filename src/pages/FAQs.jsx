@@ -1,38 +1,38 @@
 import React from 'react';
-import styles from '../styles/Common.module.css';
+import Layout from '../components/Layout';
 
 const FAQs = () => {
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.content}>
-        <h1>Frequently Asked Questions</h1>
+    <Layout>
+      <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: '0 auto' }}>
+        <h1 style={{ color: '#1e3c72', textAlign: 'center' }}>Frequently Asked Questions</h1>
         
-        <div className={styles.faqItem}>
+        <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '5px' }}>
           <h3>How do I enroll in a course?</h3>
           <p>Click on any course card from the home page and follow the enrollment instructions.</p>
         </div>
         
-        <div className={styles.faqItem}>
+        <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '5px' }}>
           <h3>Are the courses free?</h3>
           <p>Yes, all our courses are completely free as mentioned in our platform description.</p>
         </div>
         
-        <div className={styles.faqItem}>
+        <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '5px' }}>
           <h3>Do I get a certificate after completion?</h3>
           <p>Yes, certificates are provided upon successful completion of courses.</p>
         </div>
         
-        <div className={styles.faqItem}>
+        <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '5px' }}>
           <h3>Can I access courses on mobile?</h3>
           <p>Yes, our platform is fully responsive and works on all devices.</p>
         </div>
         
-        <div className={styles.faqItem}>
+        <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '5px' }}>
           <h3>How do I reset my password?</h3>
           <p>Please contact support for password reset assistance.</p>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

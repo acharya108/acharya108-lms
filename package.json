@@ -4,12 +4,25 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node src/scripts/pre-dev-checklist.js",
     "dev": "vite",
     "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "seed": "node src/scripts/seed.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "node src/scripts/seed-decisions.js",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset",
+    "context": "node src/scripts/test-decision-system.js",
+    "log:decisions": "node src/scripts/log-decisions.js",
+    "log:tanstack": "node src/scripts/log-tanstack-decision.js",
+    "guard": "node src/scripts/decision-guard.js"
   },
   "dependencies": {
+    "@prisma/client": "^6.17.1",
+    "@tanstack/react-query": "^5.90.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.4"
@@ -23,6 +36,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "prisma": "^6.17.1",
     "vite": "^7.1.7"
   }
 }

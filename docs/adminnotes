@@ -1,0 +1,28 @@
+// In your admin panel - Development section
+class DevContextManager {
+  // Add memory triggers
+  async addMemoryTrigger(category, key, value) {
+    return await prisma.systemSetting.upsert({
+      where: { key: `MEMORY_${category}_${key}` },
+      update: { value },
+      create: {
+        key: `MEMORY_${category}_${key}`,
+        value,
+        category: "memory",
+        description: `Memory trigger for ${category} - ${key}`
+      }
+    });
+  }
+
+  // Get all context for new sessions
+  async getDevelopmentContext() {
+    return await prisma.systemSetting.findMany({
+      where: { 
+        OR: [
+          { category: "memory" },
+          { key: { startsWith: "MEMORY_" } }
+        ]
+      }
+    });
+  }
+}

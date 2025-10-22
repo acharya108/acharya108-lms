@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // User progress tracking
+  enrollments Enrollment[]
+  progress    UserProgress[]
+  quizAttempts QuizAttempt[]
+
+  @@map("users")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  courseId    String   @unique // ST_TN_10_E, ST_TN_10_T, etc.
+  name        String
+  description String?
+  category    String   // School Tuitions, Recruitment Exams, etc.
+  board       String?  // TN Board, CBSE, etc.
+  medium      String?  // English, Tamil
+  createdAt   DateTime @default(now())
+  
+  enrollments Enrollment[]
+  lessons     Lesson[]
+  
+  @@map("courses")
+}
+
+model Enrollment {
+  id         String   @id @default(cuid())
+  userId     String
+  courseId   String
+  enrolledAt DateTime @default(now())
+  status     String   @default("active") // active, completed, paused
+  
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+  
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  courseId    String
+  lessonId    String   // laws-of-motion, light-reflection, etc.
+  title       String
+  description String?
+  order       Int      // Lesson sequence
+  createdAt   DateTime @default(now())
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress UserProgress[]
+  quizAttempts QuizAttempt[]
+
+  @@unique([courseId, lessonId])
+  @@map("lessons")
+}
+
+model UserProgress {
+  id           String   @id @default(cuid())
+  userId       String
+  lessonId     String
+  level        String   // foundation, elementary, intermediate, advanced, expert
+  completed    Boolean  @default(false)
+  score        Int?     // Quiz score (0-100)
+  timeSpent    Int?     // Time spent in seconds
+  lastAccessed DateTime @default(now())
+  
+  user   User   @relation(fields: [userId], references: [id])
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+  
+  @@unique([userId, lessonId, level])
+  @@map("user_progress")
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  level     String
+  score     Int
+  answers   Json     // Store quiz answers
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  user   User   @relation(fields: [userId], references: [id])
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+  
+  @@map("quiz_attempts")
+}
+
+// Add this model to your existing schema.prisma
+model DecisionLog {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  decision    String
+  rationale   String
+  alternativesConsidered Json  // ✅ CHANGED FROM String[] to Json
+  category    String
+  impact      String   @default("medium")
+  status      String   @default("active")
+  
+  // Context
+  relatedTo   String?
+  dependsOn   Json     // ✅ CHANGED FROM String[] to Json
+  replacedBy  String?
+  
+  // Ownership
+  madeBy      String   @default("ai-assisted")
+  participants Json    // ✅ CHANGED FROM String[] to Json
+  
+  createdAt   DateTime @default(now())
+  reviewedAt  DateTime?
+  expiresAt   DateTime?
+  
+  @@map("decision_logs")
+}

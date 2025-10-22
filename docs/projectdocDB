@@ -1,0 +1,36 @@
+// Add to our schema for development notes
+model DevelopmentNote {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // Markdown supported
+  category    String   // "tech-decisions", "credentials", "architecture", "todo"
+  priority    String   @default("medium") // low, medium, high, critical
+  
+  // Relationships
+  relatedTo   String?  // courseId, lessonId, or "system"
+  createdBy   String   // developer name
+  tags        String[]
+  
+  // Access control
+  isPrivate   Boolean  @default(false) // for passwords/keys
+  encrypted   Boolean  @default(false) // for sensitive data
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("dev_notes")
+}
+
+model SystemSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique // "AI_API_KEY", "DB_URL", "MEMORY_TRIGGERS"
+  value       String
+  category    String   // "api", "database", "ai", "memory"
+  isEncrypted Boolean  @default(true)
+  description String?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("system_settings")
+}

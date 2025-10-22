@@ -1,0 +1,35 @@
+// lib/context/development-context.js
+export const DevelopmentContext = {
+  // TECH STACK (IMMUTABLE)
+  techStack: {
+    database: "Neon PostgreSQL + Prisma",
+    ai: "Hugging Face Models",
+    frontend: "Next.js 14",
+    deployment: "Vercel", 
+    storage: "Cloudflare R2"
+  },
+  
+  // ARCHITECTURE DECISIONS
+  architecture: {
+    lessonLevels: 5,
+    versioning: "syllabus-based with cloning",
+    evaluation: "Hugging Face AI pipeline",
+    contentTypes: ["video", "animation", "formula", "interactive"]
+  },
+  
+  // CURRENT FOCUS
+  currentPhase: "Phase 1 - Database & Basic Structure",
+  nextSteps: [
+    "Deploy Prisma schema to Neon",
+    "Implement admin content management", 
+    "Integrate Hugging Face models"
+  ],
+  
+  // MEMORY TRIGGERS FOR AI
+  memoryPrompts: [
+    "CONTEXT: Building LMS with Neon DB, Hugging Face AI, Next.js 14",
+    "ARCHITECTURE: 5-level lessons, syllabus versioning, rich media content",
+    "CURRENT: Implementing database schema and admin panel",
+    "REMEMBER: Already decided on tech stack - no alternatives needed"
+  ]
+};
