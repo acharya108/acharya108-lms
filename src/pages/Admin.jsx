@@ -2,7 +2,7 @@
 import React from 'react';
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 //import { useAuth } from '../context/AuthContext';
-import Layout from '../components/Layout';
+import Layout from '../components/layout';
 import DecisionManager from '../components/admin/DecisionManager';
 import styles from '../styles/Admin.module.css';
 import CourseManager from '../components/admin/CourseManager';

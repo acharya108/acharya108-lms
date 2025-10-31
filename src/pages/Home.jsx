@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Layout from '../components/Layout';
+import Layout from '../components/layout';
 import LoginForm from '../components/LoginForm';
 import CategorySection from '../components/CategorySection';
 import styles from '../styles/Home.module.css'; // Use your original CSS module
