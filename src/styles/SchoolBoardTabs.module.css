@@ -1,0 +1,290 @@
+.schoolTabsContainer {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+.tabHeaders {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+  padding: 0 20px;
+  overflow-x: auto;
+}
+
+.tabHeader {
+  background: none;
+  border: none;
+  padding: 15px 20px;
+  font-size: 1em;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tabHeader:hover {
+  color: #333;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.activeTab {
+  color: #667eea;
+  border-bottom: 3px solid #667eea;
+  background: white;
+}
+
+.tabContent {
+  padding: 30px;
+}
+
+.boardInfo {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.boardInfo h3 {
+  color: #333;
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.boardInfo p {
+  color: #666;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
+
+.mediumSelector {
+  margin-top: 20px;
+}
+
+.mediumSelector label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+}
+
+.mediumButtons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.mediumButton {
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.mediumButton:hover {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.activeMedium {
+  background: #667eea !important;
+  color: white;
+  border-color: #667eea !important;
+}
+
+.classesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 25px;
+}
+
+.classCard {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.classCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: #667eea;
+}
+
+.classHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.classHeader h4 {
+  color: #333;
+  font-size: 1.4em;
+  margin: 0;
+  font-weight: bold;
+}
+
+.classInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.mediumBadge {
+  background: #28a745;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.classLevel {
+  background: #667eea;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.subjectsList h5 {
+  color: #333;
+  margin-bottom: 12px;
+  font-size: 1.1em;
+}
+
+.subjectsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.subjectTag {
+  background: white;
+  color: #667eea;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9em;
+  border: 1px solid #667eea;
+  font-weight: 500;
+}
+
+.classFeatures {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.enrollButton {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  font-size: 0.95em;
+}
+
+.enrollButton:hover {
+  transform: scale(1.02);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tabHeaders {
+    flex-wrap: wrap;
+    padding: 0 10px;
+  }
+  
+  .tabHeader {
+    padding: 12px 15px;
+    font-size: 0.9em;
+    flex: 1;
+    min-width: 100px;
+  }
+  
+  .tabContent {
+    padding: 20px;
+  }
+  
+  .classesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .classHeader {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .classInfo {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 10px;
+  }
+  
+  .classFeatures {
+    grid-template-columns: 1fr;
+  }
+  
+  .mediumButtons {
+    gap: 10px;
+  }
+  
+  .mediumButton {
+    padding: 8px 16px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabHeader {
+    min-width: 80px;
+    padding: 10px 8px;
+    font-size: 0.85em;
+  }
+  
+  .classCard {
+    padding: 20px;
+  }
+  
+  .subjectsGrid {
+    gap: 6px;
+  }
+  
+  .subjectTag {
+    font-size: 0.8em;
+    padding: 4px 8px;
+  }
+  
+  .classHeader h4 {
+    font-size: 1.2em;
+  }
+}
