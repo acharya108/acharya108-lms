@@ -1,20 +1,20 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from app.database import database
 from app.routes import auth, user
 
-app = FastAPI(title="Acharya108 LMS Backend")
+app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://www.acharya108.com"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+@app.on_event("startup")
+async def startup():
+    await database.connect()
 
-app.include_router(auth.router, prefix="/auth", tags=["auth"])
-app.include_router(user.router, prefix="/users", tags=["users"])
+@app.on_event("shutdown")
+async def shutdown():
+    await database.disconnect()
+
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(user.router, prefix="/users", tags=["Users"])
 
 @app.get("/")
-async def health_check():
+async def root():
     return {"message": "Acharya108 LMS backend is running!"}

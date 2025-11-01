@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from databases import Database
 from dotenv import load_dotenv
 import os
-
+from app.routes import auth  # Adjust based on your file structure
 load_dotenv()  # loads environment variables from a .env file into os.environ
 
 
@@ -15,6 +15,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 database = Database(DATABASE_URL)
 app = FastAPI()
+app.include_router(auth.router)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

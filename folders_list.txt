@@ -1,0 +1,12 @@
+.git
+.idea
+.venv
+.vercel
+acharya108-lms
+docs
+node_modules
+prisma
+public
+server
+src
+venv
