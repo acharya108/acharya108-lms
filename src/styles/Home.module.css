@@ -7,7 +7,11 @@
 .heroSection {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+
   padding: 60px 20px 80px;
+
+  padding: 80px 20px;
+ de5d653 (Initial commit of backend files in backend-lms)
   text-align: center;
 }
 
@@ -17,12 +21,17 @@
 }
 
 .heroTitle {
+
   font-size: 3em;
+
+  font-size: 3.5em;
+ de5d653 (Initial commit of backend files in backend-lms)
   margin-bottom: 20px;
   font-weight: bold;
 }
 
 .heroSubtitle {
+
   font-size: 1.2em;
   margin-bottom: 40px;
   opacity: 0.9;
@@ -34,6 +43,16 @@
 /* Home-specific auth section */
 .homeAuthSection {
   margin: 30px 0;
+
+  font-size: 1.3em;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+
+/* Auth Section in Hero */
+.authSection {
+  margin-bottom: 40px;
+ de5d653 (Initial commit of backend files in backend-lms)
 }
 
 .userInfo {
@@ -104,6 +123,7 @@
   opacity: 0.8;
 }
 
+
 /* Loading Styles */
 .loadingContainer {
   display: flex;
@@ -130,12 +150,19 @@
 }
 
 /* Rest of your existing styles for container, sections, etc. */
+
+/* Container */
+>>>>>>> de5d653 (Initial commit of backend files in backend-lms)
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
+
+
+/* Section Titles */
+ de5d653 (Initial commit of backend files in backend-lms)
 .sectionTitle {
   text-align: center;
   font-size: 2.5em;
@@ -153,11 +180,164 @@
   margin-right: auto;
 }
 
+
+/* Categories Section */
+ de5d653 (Initial commit of backend files in backend-lms)
 .categoriesSection {
   padding: 80px 0;
   background: white;
 }
 
+
+.categorySection {
+  margin-bottom: 30px;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.categorySection:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.categoryHeader {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 20px 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s ease;
+  user-select: none;
+}
+
+.categoryHeader:hover {
+  background: linear-gradient(135deg, #e668e6 0%, #f0364c 100%);
+}
+
+.categoryTitle {
+  font-size: 1.8em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.courseCount {
+  font-size: 0.7em;
+  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.arrow {
+  font-size: 1.2em;
+  transition: transform 0.3s ease;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+/* Course Content */
+.courseContent {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.contentVisible {
+  max-height: 5000px;
+  opacity: 1;
+  padding: 30px;
+  background: #f8f9fa;
+}
+
+.contentHidden {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 30px;
+  background: #f8f9fa;
+}
+
+/* Course Grid */
+.courseGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.courseCard {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.courseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.courseIcon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+.courseInfo {
+  flex: 1;
+}
+
+.courseName {
+  font-size: 1.4em;
+  margin: 0 0 8px 0;
+  color: #333;
+  font-weight: bold;
+}
+
+.courseDescription {
+  color: #666;
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+}
+
+.learnMoreBtn {
+  background: transparent;
+  border: 2px solid #667eea;
+  color: #667eea;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.learnMoreBtn:hover {
+  background: #667eea;
+  color: white;
+}
+
+/* Features Section */
+ de5d653 (Initial commit of backend files in backend-lms)
 .featuresSection {
   padding: 80px 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -204,6 +384,9 @@
   line-height: 1.6;
 }
 
+
+/* CTA Section */
+ de5d653 (Initial commit of backend files in backend-lms)
 .ctaSection {
   padding: 80px 0;
   background: white;
@@ -234,7 +417,11 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .heroTitle {
+
     font-size: 2.2em;
+
+    font-size: 2.5em;
+ de5d653 (Initial commit of backend files in backend-lms)
   }
   
   .heroSubtitle {
@@ -250,19 +437,76 @@
     font-size: 2em;
   }
   
+
+  .categoryTitle {
+    font-size: 1.4em;
+  }
+  
+  .courseGrid {
+    grid-template-columns: 1fr;
+  }
+  
+ de5d653 (Initial commit of backend files in backend-lms)
   .featuresGrid {
     grid-template-columns: 1fr;
   }
   
+
+  .courseCard {
+    padding: 20px;
+  }
+  
+  .categoryHeader {
+    padding: 15px 20px;
+  }
+  
+  .contentVisible {
+    padding: 20px;
+  }
+  
+ de5d653 (Initial commit of backend files in backend-lms)
   .userInfo {
     flex-direction: column;
     gap: 15px;
   }
 }
+
 /* Add this to your Home.module.css */
 .heroSection {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 100px 20px 80px; /* Increased top padding to account for header */
   text-align: center;
+
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 2em;
+  }
+  
+  .heroStats {
+    gap: 20px;
+  }
+  
+  .statItem h3 {
+    font-size: 2em;
+  }
+  
+  .categoryHeader {
+    padding: 15px;
+  }
+  
+  .categoryTitle {
+    font-size: 1.2em;
+  }
+  
+  .courseCard {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .courseIcon {
+    align-self: center;
+  }
+ de5d653 (Initial commit of backend files in backend-lms)
 }

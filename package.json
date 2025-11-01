@@ -1,3 +1,5 @@
+
+
 {
   "name": "my-lms",
   "private": true,
@@ -27,6 +29,12 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "nodemailer": "^7.0.10",
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.4"

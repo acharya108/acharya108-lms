@@ -1553,5 +1553,9 @@ export default function CourseIntroPage() {
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
 export { courseDetails };
+=======
+}
+>>>>>>> de5d653 (Initial commit of backend files in backend-lms)

@@ -1,3 +1,5 @@
+
+
 # Logs
 logs
 *.log
@@ -21,6 +23,17 @@ dist-ssr/
 .vscode/
 !.vscode/extensions.json
 .idea/
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+de5d653 (Initial commit of backend files in backend-lms)
 .DS_Store
 *.suo
 *.ntvs*
@@ -29,9 +42,12 @@ dist-ssr/
 *.sw?
 
 # Python environment and cache
+
+ de5d653 (Initial commit of backend files in backend-lms)
 myenv/
 __pycache__/
 *.pyc
 
 # Prisma generated files
 /src/generated/prisma/
+de5d653 (Initial commit of backend files in backend-lms)

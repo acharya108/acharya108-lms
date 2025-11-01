@@ -1,4 +1,5 @@
 import React from 'react';
+
 import Layout from '../components/layout';
 
 const AboutUs = () => {
@@ -25,3 +26,15 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
+
+import Layout from '../components/Layout';
+
+export default function AboutUs() {
+  return (
+    <>
+      <h2>About Us</h2>
+      <p>This is the About Us page content.</p>
+    </>
+  );
+}
+ de5d653 (Initial commit of backend files in backend-lms)

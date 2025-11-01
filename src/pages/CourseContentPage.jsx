@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+
 import Layout from '../components/layout';
+
+import Layout from '../components/Layout';
+>>>>>>> de5d653 (Initial commit of backend files in backend-lms)
 import styles from '../styles/CourseContent.module.css';
 
 const CourseContent = () => {
