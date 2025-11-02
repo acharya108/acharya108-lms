@@ -1,4 +1,5 @@
 from pydantic import BaseModel, constr
+from pydantic import BaseModel
 
 from pydantic import BaseModel, EmailStr, ConfigDict
 
@@ -23,3 +24,7 @@ class UserOut(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    
+class ResetPassword(BaseModel):
+    new_password: str
+    email: str  # Optional: For email-based resets (no token)
