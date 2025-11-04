@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/api/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "backend/api/main.py"
+    }
+  ],
+  "env": {
+    "DATABASE_URL_ASYNC": "@database_url_async",
+    "DATABASE_URL_SYNC": "@database_url_sync",
+    "JWT_SECRET": "@jwt_secret",
+    "SMTP_HOST": "@smtp_host",
+    "SMTP_PORT": "@smtp_port",
+    "SMTP_USER": "@smtp_user",
+    "SMTP_PASSWORD": "@smtp_password",
+    "EMAIL_FROM": "@email_from"
+  }
+}
