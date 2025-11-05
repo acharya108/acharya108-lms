@@ -1,53 +1,59 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// prisma/schema.prisma
 generator client {
-  provider = "prisma-client-js"
+  provider             = "prisma-client-js"
+  recursive_type_depth = "5"
+  interface            = "asyncio"
+}
+
+generator python {
+  provider  = "prisma-client-py"
+  interface = "asyncio"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 model User {
-  id                String   @id @default(cuid())
-  email             String   @unique
+  id                String         @id @default(cuid())
+  email             String         @unique
   name              String?
-  phone             String?   // This line must be present
+  phone             String?
   password          String
-  isConfirmed       Boolean  @default(false)
-  confirmationToken String?  // no @unique yet
-
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  // User progress tracking
-  enrollments Enrollment[]
-  progress    UserProgress[]
-  quizAttempts QuizAttempt[]
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  confirmationToken String?
+  isConfirmed       Boolean        @default(false)
+  role              String         @default("student")
+  enrollments       Enrollment[]
+  quizAttempts      QuizAttempt[]
+  progress          UserProgress[]
 
   @@map("users")
 }
 
+model Board {
+  id      String  @id @default(cuid())
+  name    String  @unique
+  country String
+  grades  Grade[]
+
+  @@map("boards")
+}
 
 model Course {
-  id          String   @id @default(cuid())
-  courseId    String   @unique // ST_TN_10_E, ST_TN_10_T, etc.
+  id          String       @id @default(cuid())
+  courseId    String       @unique
   name        String
   description String?
-  category    String   // School Tuitions, Recruitment Exams, etc.
-  board       String?  // TN Board, CBSE, etc.
-  medium      String?  // English, Tamil
-  createdAt   DateTime @default(now())
-  
+  category    String
+  board       String?
+  medium      String?
+  createdAt   DateTime     @default(now())
   enrollments Enrollment[]
   lessons     Lesson[]
-  
+
   @@map("courses")
 }
 
@@ -56,45 +62,71 @@ model Enrollment {
   userId     String
   courseId   String
   enrolledAt DateTime @default(now())
-  status     String   @default("active") // active, completed, paused
-  
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
-  
+  status     String   @default("active")
+  course     Course   @relation(fields: [courseId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
   @@unique([userId, courseId])
   @@map("enrollments")
 }
 
-model Lesson {
-  id          String   @id @default(cuid())
-  courseId    String
-  lessonId    String   // laws-of-motion, light-reflection, etc.
-  title       String
-  description String?
-  order       Int      // Lesson sequence
-  createdAt   DateTime @default(now())
+model Grade {
+  id       String    @id @default(cuid())
+  name     String
+  boardId  String
+  board    Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  subjects Subject[]
 
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  progress UserProgress[]
+  @@map("grades")
+}
+
+model Subject {
+  id      String   @id @default(cuid())
+  name    String
+  gradeId String
+  lessons Lesson[]
+  grade   Grade    @relation(fields: [gradeId], references: [id], onDelete: Cascade)
+
+  @@map("subjects")
+}
+
+model Lesson {
+  id           String          @id @default(cuid())
+  courseId     String
+  lessonId     String
+  title        String
+  description  String?
+  order        Int
+  createdAt    DateTime        @default(now())
+  subjectId    String
+  contents     LessonContent[]
+  course       Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  subject      Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  questions    Question[]
   quizAttempts QuizAttempt[]
+  progress     UserProgress[]
 
   @@unique([courseId, lessonId])
   @@map("lessons")
 }
 
 model UserProgress {
-  id           String   @id @default(cuid())
-  userId       String
-  lessonId     String
-  level        String   // foundation, elementary, intermediate, advanced, expert
-  completed    Boolean  @default(false)
-  score        Int?     // Quiz score (0-100)
-  timeSpent    Int?     // Time spent in seconds
-  lastAccessed DateTime @default(now())
-  
-  user   User   @relation(fields: [userId], references: [id])
-  lesson Lesson @relation(fields: [lessonId], references: [id])
-  
+  id             String   @id @default(cuid())
+  userId         String
+  lessonId       String
+  level          String
+  completed      Boolean  @default(false)
+  score          Int?
+  timeSpent      Int?
+  lastAccessed   DateTime @default(now())
+  currentLevel   Int      @default(1)
+  levelScores    Json     @default("{}")
+  studentId      String
+  unlockedLevels Json     @default("[1]")
+  lesson         Lesson   @relation(fields: [lessonId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
+
+  @@unique([studentId, lessonId])
   @@unique([userId, lessonId, level])
   @@map("user_progress")
 }
@@ -105,40 +137,123 @@ model QuizAttempt {
   lessonId  String
   level     String
   score     Int
-  answers   Json     // Store quiz answers
+  answers   Json
   completed Boolean  @default(false)
   createdAt DateTime @default(now())
-  
-  user   User   @relation(fields: [userId], references: [id])
-  lesson Lesson @relation(fields: [lessonId], references: [id])
-  
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
   @@map("quiz_attempts")
 }
 
-// Add this model to your existing schema.prisma
 model DecisionLog {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  decision    String
-  rationale   String
-  alternativesConsidered Json  // ✅ CHANGED FROM String[] to Json
-  category    String
-  impact      String   @default("medium")
-  status      String   @default("active")
-  
-  // Context
-  relatedTo   String?
-  dependsOn   Json     // ✅ CHANGED FROM String[] to Json
-  replacedBy  String?
-  
-  // Ownership
-  madeBy      String   @default("ai-assisted")
-  participants Json    // ✅ CHANGED FROM String[] to Json
-  
-  createdAt   DateTime @default(now())
-  reviewedAt  DateTime?
-  expiresAt   DateTime?
-  
+  id                     String    @id @default(cuid())
+  title                  String
+  description            String
+  decision               String
+  rationale              String
+  alternativesConsidered Json
+  category               String
+  impact                 String    @default("medium")
+  status                 String    @default("active")
+  relatedTo              String?
+  dependsOn              Json
+  replacedBy             String?
+  madeBy                 String    @default("ai-assisted")
+  participants           Json
+  createdAt              DateTime  @default(now())
+  reviewedAt             DateTime?
+  expiresAt              DateTime?
+
   @@map("decision_logs")
+}
+
+model LessonContent {
+  id            String   @id @default(cuid())
+  lessonId      String
+  level         Int
+  richTextNotes String
+  videoUrls     Json     @default("[]")
+  interactives  Json     @default("{}")
+  definitions   Json     @default("{}")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lesson        Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, level])
+  @@map("lesson_contents")
+}
+
+model Question {
+  id            String              @id @default(cuid())
+  lessonId      String
+  type          String
+  questionText  String
+  difficulty    Int
+  options       Json?
+  correctAnswer String?
+  keyTerms      Json                @default("[]")
+  position      String
+  answers       DescriptiveAnswer[]
+  lesson        Lesson              @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@map("questions")
+}
+
+model DescriptiveAnswer {
+  id            String   @id @default(cuid())
+  questionId    String
+  level         Int
+  answerText    String
+  expectedTerms Json     @default("[]")
+  rubric        Json     @default("{}")
+  question      Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, level])
+  @@map("descriptive_answers")
+}
+
+model StudentProgress {
+  id             String   @id @default(cuid())
+  studentId      String
+  lessonId       String
+  currentLevel   Int      @default(1)
+  levelScores    Json     @default("{}")
+  unlockedLevels Json     @default("[1]")
+  lastAccessed   DateTime @updatedAt
+
+  @@unique([studentId, lessonId])
+  @@map("student_progress")
+}
+
+model StudentAttempt {
+  id            String   @id @default(cuid())
+  studentId     String
+  questionId    String
+  attemptDate   DateTime @default(now())
+  studentAnswer String
+  isVoiceInput  Boolean  @default(false)
+  score         Float
+  semanticScore Float
+  keyTermScore  Float
+  grammarScore  Float
+  feedback      String
+  missingTerms  Json     @default("[]")
+  timeTaken     Int
+
+  @@map("student_attempts")
+}
+
+model DailyReport {
+  id                 String   @id @default(cuid())
+  studentId          String
+  date               DateTime @default(now())
+  questionsAttempted Int
+  averageScore       Float
+  levelDistribution  Json     @default("{}")
+  timeSpent          Int
+  reportData         Json     @default("{}")
+
+  @@unique([studentId, date])
+  @@map("daily_reports")
 }

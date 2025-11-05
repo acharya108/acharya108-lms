@@ -1,83 +1,66 @@
-from fastapi import FastAPI, HTTPException
+﻿from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, EmailStr
-from passlib.context import CryptContext
-from jose import jwt
-from datetime import datetime, timedelta
-from databases import Database
-from dotenv import load_dotenv
+from prisma import Prisma
 import os
+from dotenv import load_dotenv
 
-# Import your routers properly; adjust path if moved
-from app.routes import auth, user
+load_dotenv()
 
-load_dotenv()  # Load environment variables
-
-# Environment variables
-DATABASE_URL = os.getenv("DATABASE_URL")
-SECRET_KEY = os.getenv("JWT_SECRET")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
-
-# Initialize database connection
-database = Database(DATABASE_URL)
-
-# Initialize FastAPI app
-app = FastAPI()
-
-# Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# Include CORS middleware with allowed origins
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://www.acharya108.com"],  # frontend domain
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+app = FastAPI(
+    title='Acharya108 LMS API',
+    description='Learning Management System Backend',
+    version='1.0.0'
 )
 
-# Include authentication and user routers with prefixes and tags
-app.include_router(auth.router, prefix="/auth", tags=["Auth"])
-app.include_router(user.router, prefix="/users", tags=["Users"])
+# CORS
+ALLOWED_ORIGINS = os.getenv('ALLOWED_ORIGINS', 'http://localhost:5173,http://localhost:3000').split(',')
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
-# Models for user and token (if used directly in main, else in separate router modules)
-class UserIn(BaseModel):
-    email: EmailStr
-    password: str
+# Database - single instance
+db = Prisma()
 
-class UserOut(BaseModel):
-    email: EmailStr
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-# Utility async password verify & hash functions
-async def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-async def get_password_hash(password):
-    return pwd_context.hash(password)
-
-# Async token creation
-async def create_access_token(data: dict, expires_delta: timedelta = None):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta if expires_delta else timedelta(minutes=15))
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-# Startup and shutdown events
-@app.on_event("startup")
+@app.on_event('startup')
 async def startup():
-    await database.connect()
+    try:
+        await db.connect()
+        print('✅ Database connected successfully')
+    except Exception as e:
+        print(f'❌ Database connection failed: {e}')
 
-@app.on_event("shutdown")
+@app.on_event('shutdown')
 async def shutdown():
-    await database.disconnect()
+    await db.disconnect()
+    print('✅ Database disconnected')
 
-# Simple root route to verify backend running
-@app.get("/")
+@app.get('/')
 async def root():
-    return {"message": "Acharya108 LMS backend is running!"}
+    return {'message': 'Acharya108 LMS API is running!'}
+
+@app.get('/health')
+async def health():
+    return {
+        'status': 'healthy',
+        'database': db.is_connected()
+    }
+
+# Import auth routes
+try:
+    from api.routes import auth
+    app.include_router(auth.router, prefix='/api/auth', tags=['authentication'])
+    print('✅ Auth routes loaded')
+except Exception as e:
+    print(f'⚠️  Could not load auth routes: {e}')
+
+# Import registration routes
+try:
+    from api.registration import router as registration_router
+    app.include_router(registration_router, prefix='/api', tags=['registration'])
+    print('✅ Registration routes loaded')
+except ImportError as e:
+    print(f'⚠️  Could not load registration routes: {e}')

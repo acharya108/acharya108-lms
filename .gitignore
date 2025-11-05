@@ -15,7 +15,7 @@ dist-ssr
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
+
 .DS_Store
 *.suo
 *.ntvs*
@@ -24,3 +24,20 @@ dist-ssr
 *.sw?
 # Ignore environment variables file
 .env
+
+# Ignore environment variable files
+.env
+**/.env
+
+# Ignore virtual environments
+.venv/
+venv/
+myenv/
+
+
+
+# OS or editor related files (optional)
+
+Thumbs.db
+.idea/
+.vscode/

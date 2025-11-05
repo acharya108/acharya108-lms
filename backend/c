@@ -1,0 +1,42 @@
+# check_schema.py
+import asyncio
+import asyncpg
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+async def check_users_schema():
+    print("🔍 Checking Database Schema")
+    print("=" * 40)
+    
+    try:
+        conn = await asyncpg.connect(os.getenv('DATABASE_URL'))
+        
+        # Get all columns from users table
+        columns = await conn.fetch("""
+            SELECT column_name, data_type, is_nullable, column_default
+            FROM information_schema.columns 
+            WHERE table_name = 'users' 
+            ORDER BY ordinal_position
+        """)
+        
+        print("📋 Users table columns:")
+        for col in columns:
+            print(f"   {col['column_name']} ({col['data_type']})")
+        
+        # Check if we have any confirmation-related columns
+        confirmation_cols = [col for col in columns if 'confirm' in col['column_name'].lower() or 'verify' in col['column_name'].lower()]
+        if confirmation_cols:
+            print("\n✅ Confirmation columns found:")
+            for col in confirmation_cols:
+                print(f"   {col['column_name']}")
+        else:
+            print("\n❌ No confirmation columns found")
+        
+        await conn.close()
+        
+    except Exception as e:
+        print(f"❌ Error: {e}")
+
+asyncio.run(check_users_schema())
