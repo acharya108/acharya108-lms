@@ -1,0 +1,20 @@
+// ============================================================================
+// FILE: apps/teacher-app/src/App.css
+// ============================================================================
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--light);
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+}

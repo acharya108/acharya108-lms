@@ -1,5 +1,6 @@
-﻿from fastapi import FastAPI
+﻿from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from prisma import Prisma
 import os
 from dotenv import load_dotenv
@@ -21,6 +22,9 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+# Security
+security = HTTPBearer()
 
 # Database - single instance
 db = Prisma()
@@ -49,18 +53,13 @@ async def health():
         'database': db.is_connected()
     }
 
-# Import auth routes
+# Import all routes
 try:
-    from api.routes import auth
+    from api.routes import auth, users, email, social_auth
     app.include_router(auth.router, prefix='/api/auth', tags=['authentication'])
-    print('✅ Auth routes loaded')
+    app.include_router(users.router, prefix='/api/users', tags=['users'])
+    app.include_router(email.router, prefix='/api/email', tags=['email'])
+    app.include_router(social_auth.router, prefix='/api/auth', tags=['social-auth'])
+    print('✅ All routes loaded successfully')
 except Exception as e:
-    print(f'⚠️  Could not load auth routes: {e}')
-
-# Import registration routes
-try:
-    from api.registration import router as registration_router
-    app.include_router(registration_router, prefix='/api', tags=['registration'])
-    print('✅ Registration routes loaded')
-except ImportError as e:
-    print(f'⚠️  Could not load registration routes: {e}')
+    print(f'⚠️  Could not load some routes: {e}')
